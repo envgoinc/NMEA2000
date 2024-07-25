@@ -1514,6 +1514,206 @@ inline bool ParseN2kTransmissionParameters(const tN2kMsg &N2kMsg, unsigned char 
 }
 
 /************************************************************************//**
+ * \brief Setting up PGN 127494 Message "Electric Drive Information"
+ * \ingroup group_msgSetUp
+ * 
+ * Electric motor specifications and ratings information.
+ *  
+ * \param N2kMsg              Reference to a N2kMsg Object, 
+ *                            Output: NMEA2000 message ready to be sent.
+ * \param InverterMotorIdentifier         Inverter/Motor Identifier (0..253)
+ * \param MotorType                       Motor Type (0..13)
+ * \param MotorVoltageRating              Motor Voltage Rating (0.1 V)
+ * \param MaxContinuousMotorPower         Maximum Continuous Motor Power (W)
+ * \param MaxBoostMotorPower              Maximum Boost Motor Power (W)
+ * \param MaxMotorTempRating              Maximum Motor Temperature Rating (0.01 K)
+ * \param RatedMotorSpeed                 Rated Motor Speed (0.25 rpm)
+ * \param MaxControllerTempRating         Maximum Controller Temperature Rating (0.01 K)
+ * \param MotorShaftTorqueRating          Motor Shaft Torque Rating
+ * \param MotorDCVoltageDeratingThreshold Motor DC-Voltage Derating Threshold (0.1 V)
+ * \param MotorDCVoltageCutOffThreshold   Motor DC-Voltage Cut Off Threshold (0.1 V)
+ * \param DriveMotorHours                 Drive/Motor Hours (s)
+ */
+void SetN2kPGN127494(tN2kMsg &N2kMsg, unsigned char InverterMotorIdentifier, unsigned char MotorType,
+                     double MotorVoltageRating, unsigned long MaxContinuousMotorPower, unsigned long MaxBoostMotorPower,
+                     double MaxMotorTempRating, double RatedMotorSpeed, double MaxControllerTempRating,
+                     unsigned short MotorShaftTorqueRating, double MotorDCVoltageDeratingThreshold,
+                     double MotorDCVoltageCutOffThreshold, unsigned long DriveMotorHours);
+
+/************************************************************************//**
+ * \brief Setting up Message "Electric Drive Information" - PGN 127494
+ * \ingroup group_msgSetUp
+ * 
+ * Alias of PGN 127494. This alias was introduced to improve the readability
+ * of the source code. See parameter details on \ref SetN2kPGN127494
+ */
+inline void SetN2kElectricDriveInformation(tN2kMsg &N2kMsg, unsigned char InverterMotorIdentifier, unsigned char MotorType,
+                     double MotorVoltageRating, unsigned long MaxContinuousMotorPower, unsigned long MaxBoostMotorPower,
+                     double MaxMotorTempRating, double RatedMotorSpeed, double MaxControllerTempRating,
+                     unsigned short MotorShaftTorqueRating, double MotorDCVoltageDeratingThreshold,
+                     double MotorDCVoltageCutOffThreshold, unsigned long DriveMotorHours) {
+  SetN2kPGN127494(N2kMsg, InverterMotorIdentifier, MotorType, MotorVoltageRating, MaxContinuousMotorPower,
+                  MaxBoostMotorPower, MaxMotorTempRating, RatedMotorSpeed, MaxControllerTempRating,
+                  MotorShaftTorqueRating, MotorDCVoltageDeratingThreshold, MotorDCVoltageCutOffThreshold, DriveMotorHours);
+}
+
+/************************************************************************//**
+ * \brief Parsing the content of Message PGN 127494 "Electric Drive Information"
+ * \ingroup group_msgParsers
+ * 
+ * Electric motor specifications and ratings information.
+ *  
+ * \param N2kMsg                           Reference to a N2kMsg Object, 
+ * \param InverterMotorIdentifier          Inverter/Motor Identifier
+ * \param MotorType                        Motor Type
+ * \param MotorVoltageRating               Motor Voltage Rating
+ * \param MaxContinuousMotorPower          Maximum Continuous Motor Power
+ * \param MaxBoostMotorPower               Maximum Boost Motor Power
+ * \param MaxMotorTempRating               Maximum Motor Temperature Rating
+ * \param RatedMotorSpeed                  Rated Motor Speed
+ * \param MaxControllerTempRating          Maximum Controller Temperature Rating
+ * \param MotorShaftTorqueRating           Motor Shaft Torque Rating
+ * \param MotorDCVoltageDeratingThreshold  Motor DC-Voltage Derating Threshold
+ * \param MotorDCVoltageCutOffThreshold    Motor DC-Voltage Cut Off Threshold
+ * \param DriveMotorHours                  Drive/Motor Hours
+ *
+ * \return true     Parsing of PGN Message successful
+ * \return false    Parsing of PGN Message aborted
+ * 
+ */
+bool ParseN2kPGN127494(const tN2kMsg &N2kMsg, unsigned char &InverterMotorIdentifier, unsigned char &MotorType,
+                     double &MotorVoltageRating, unsigned long &MaxContinuousMotorPower, unsigned long &MaxBoostMotorPower,
+                     double &MaxMotorTempRating, double &RatedMotorSpeed, double &MaxControllerTempRating,
+                     unsigned short &MotorShaftTorqueRating, double &MotorDCVoltageDeratingThreshold,
+                     double &MotorDCVoltageCutOffThreshold, unsigned long &DriveMotorHours);
+
+/************************************************************************//**
+ * \brief Parsing the content of an "Electric Drive Information" 
+ *        message - PGN 127494
+ * \ingroup group_msgParsers
+ * 
+ * Alias of PGN 127494. This alias was introduced to improve the readability
+ * of the source code. See parameter details on \ref ParseN2kPGN127494 
+ */
+inline bool ParseN2kElectricDriveInformation(const tN2kMsg &N2kMsg, unsigned char &InverterMotorIdentifier, unsigned char &MotorType,
+                     double &MotorVoltageRating, unsigned long &MaxContinuousMotorPower, unsigned long &MaxBoostMotorPower,
+                     double &MaxMotorTempRating, double &RatedMotorSpeed, double &MaxControllerTempRating,
+                     unsigned short &MotorShaftTorqueRating, double &MotorDCVoltageDeratingThreshold,
+                     double &MotorDCVoltageCutOffThreshold, unsigned long &DriveMotorHours) {
+  return ParseN2kPGN127494(N2kMsg, InverterMotorIdentifier, MotorType, MotorVoltageRating, MaxContinuousMotorPower,
+                           MaxBoostMotorPower, MaxMotorTempRating, RatedMotorSpeed, MaxControllerTempRating,
+                           MotorShaftTorqueRating, MotorDCVoltageDeratingThreshold, MotorDCVoltageCutOffThreshold, DriveMotorHours);
+}
+
+/************************************************************************//**
+ * \brief Setting up PGN 127495 Message "Electric Energy Storage Information"
+ * \ingroup group_msgSetUp
+ * 
+ * Electric energy storage information.
+ *  
+ * \param N2kMsg                       Reference to a N2kMsg Object, 
+ *                                     Output: NMEA2000 message ready to be send.
+ * \param EnergyStorageID              Energy Storage Identifier
+ * \param MotorType                    Motor Type
+ * \param StorageChemistryConversion   Storage Chemistry/Conversion
+ * \param MaxTempDerating              Maximum Temperature Derating in 0.01 K
+ * \param MaxTempShutOff               Maximum Temperature Shut Off in 0.01 K
+ * \param MinTempDerating              Minimum Temperature Derating in 0.01 K
+ * \param MinTempShutOff               Minimum Temperature Shut Off in 0.01 K
+ * \param UsableBatteryEnergy          Usable Battery Energy in kWh
+ * \param StateOfHealth                State of Health
+ * \param BatteryCycleCounter          Battery Cycle Counter
+ * \param BatteryFullStatus            Battery Full Status
+ * \param BatteryEmptyStatus           Battery Empty Status
+ * \param MaxChargeSOC                 Maximum Charge (SOC)
+ * \param MinChargeSOC                 Minimum Charge (SOC)
+ * 
+ */
+void SetN2kPGN127495(tN2kMsg &N2kMsg, unsigned char EnergyStorageID, unsigned char MotorType,
+                     unsigned char StorageChemistryConversion, unsigned short MaxTempDerating,
+                     unsigned short MaxTempShutOff, unsigned short MinTempDerating,
+                     unsigned short MinTempShutOff, unsigned int UsableBatteryEnergy,
+                     unsigned char StateOfHealth, unsigned short BatteryCycleCounter,
+                     unsigned char BatteryFullStatus, unsigned char BatteryEmptyStatus,
+                     unsigned char MaxChargeSOC, unsigned char MinChargeSOC);
+
+/************************************************************************//**
+ * \brief Setting up Message "Electric Energy Storage Information" - PGN 127495
+ * \ingroup group_msgSetUp
+ * 
+ * Alias of PGN 127495. This alias was introduced to improve the readability
+ * of the source code. See parameter details on \ref SetN2kPGN127495
+ */
+inline void SetN2kElectricEnergyStorageInfo(tN2kMsg &N2kMsg, unsigned char EnergyStorageID, unsigned char MotorType,
+                     unsigned char StorageChemistryConversion, unsigned short MaxTempDerating,
+                     unsigned short MaxTempShutOff, unsigned short MinTempDerating,
+                     unsigned short MinTempShutOff, unsigned int UsableBatteryEnergy,
+                     unsigned char StateOfHealth, unsigned short BatteryCycleCounter,
+                     unsigned char BatteryFullStatus, unsigned char BatteryEmptyStatus,
+                     unsigned char MaxChargeSOC, unsigned char MinChargeSOC) {
+  SetN2kPGN127495(N2kMsg, EnergyStorageID, MotorType, StorageChemistryConversion, MaxTempDerating,
+                  MaxTempShutOff, MinTempDerating, MinTempShutOff, UsableBatteryEnergy,
+                  StateOfHealth, BatteryCycleCounter, BatteryFullStatus, BatteryEmptyStatus,
+                  MaxChargeSOC, MinChargeSOC);
+}
+
+/************************************************************************//**
+ * \brief Parsing the content of Message PGN 127495 "Electric Energy Storage Information"
+ * \ingroup group_msgParsers
+ * 
+ * Electric energy storage information.
+ *  
+ * \param N2kMsg                       Reference to a N2kMsg Object, 
+ * \param EnergyStorageID              Energy Storage Identifier
+ * \param MotorType                    Motor Type
+ * \param StorageChemistryConversion   Storage Chemistry/Conversion
+ * \param MaxTempDerating              Maximum Temperature Derating in 0.01 K
+ * \param MaxTempShutOff               Maximum Temperature Shut Off in 0.01 K
+ * \param MinTempDerating              Minimum Temperature Derating in 0.01 K
+ * \param MinTempShutOff               Minimum Temperature Shut Off in 0.01 K
+ * \param UsableBatteryEnergy          Usable Battery Energy in kWh
+ * \param StateOfHealth                State of Health
+ * \param BatteryCycleCounter          Battery Cycle Counter
+ * \param BatteryFullStatus            Battery Full Status
+ * \param BatteryEmptyStatus           Battery Empty Status
+ * \param MaxChargeSOC                 Maximum Charge (SOC)
+ * \param MinChargeSOC                 Minimum Charge (SOC)
+ *
+ * \return true     Parsing of PGN Message successful
+ * \return false    Parsing of PGN Message aborted
+ * 
+ */
+bool ParseN2kPGN127495(const tN2kMsg &N2kMsg, unsigned char &EnergyStorageID, unsigned char &MotorType,
+                       unsigned char &StorageChemistryConversion, unsigned short &MaxTempDerating,
+                       unsigned short &MaxTempShutOff, unsigned short &MinTempDerating,
+                       unsigned short &MinTempShutOff, unsigned int &UsableBatteryEnergy,
+                       unsigned char &StateOfHealth, unsigned short &BatteryCycleCounter,
+                       unsigned char &BatteryFullStatus, unsigned char &BatteryEmptyStatus,
+                       unsigned char &MaxChargeSOC, unsigned char &MinChargeSOC);
+
+/************************************************************************//**
+ * \brief Parsing the content of an "Electric Energy Storage Information" 
+ *        message - PGN 127495
+ * \ingroup group_msgParsers
+ * 
+ * Alias of PGN 127495. This alias was introduced to improve the readability
+ * of the source code. See parameter details on \ref ParseN2kPGN127495 
+ */
+inline bool ParseN2kElectricEnergyStorageInfo(const tN2kMsg &N2kMsg, unsigned char &EnergyStorageID, unsigned char &MotorType,
+                       unsigned char &StorageChemistryConversion, unsigned short &MaxTempDerating,
+                       unsigned short &MaxTempShutOff, unsigned short &MinTempDerating,
+                       unsigned short &MinTempShutOff, unsigned int &UsableBatteryEnergy,
+                       unsigned char &StateOfHealth, unsigned short &BatteryCycleCounter,
+                       unsigned char &BatteryFullStatus, unsigned char &BatteryEmptyStatus,
+                       unsigned char &MaxChargeSOC, unsigned char &MinChargeSOC) {
+  return ParseN2kPGN127495(N2kMsg, EnergyStorageID, MotorType, StorageChemistryConversion, MaxTempDerating,
+                           MaxTempShutOff, MinTempDerating, MinTempShutOff, UsableBatteryEnergy,
+                           StateOfHealth, BatteryCycleCounter, BatteryFullStatus, BatteryEmptyStatus,
+                           MaxChargeSOC, MinChargeSOC);
+}
+
+
+/************************************************************************//**
  * \brief Setting up PGN 127497 Message "Trip Parameters, Engine"
  * \ingroup group_msgSetUp
  * 

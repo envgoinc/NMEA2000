@@ -524,6 +524,125 @@ bool ParseN2kPGN127493(const tN2kMsg &N2kMsg, unsigned char &EngineInstance, tN2
 }
 
 //*****************************************************************************
+// Electric Drive Information
+void SetN2kPGN127494(tN2kMsg &N2kMsg, unsigned char InverterMotorIdentifier, unsigned char MotorType,
+                     double MotorVoltageRating, unsigned long MaxContinuousMotorPower, unsigned long MaxBoostMotorPower,
+                     double MaxMotorTempRating, double RatedMotorSpeed, double MaxControllerTempRating,
+                     unsigned short MotorShaftTorqueRating, double MotorDCVoltageDeratingThreshold,
+                     double MotorDCVoltageCutOffThreshold, unsigned long DriveMotorHours) {
+  N2kMsg.SetPGN(127494L);
+  N2kMsg.Priority = 2;
+  N2kMsg.AddByte(InverterMotorIdentifier);
+  N2kMsg.AddByte(MotorType | (0xF << 4)); // MotorType (4 bits) + Reserved (4 bits)
+  N2kMsg.Add2ByteUDouble(MotorVoltageRating, 0.1);
+  N2kMsg.Add4ByteUInt(MaxContinuousMotorPower);
+  N2kMsg.Add4ByteUInt(MaxBoostMotorPower);
+  N2kMsg.Add2ByteUDouble(MaxMotorTempRating, 0.01);
+  N2kMsg.Add2ByteUDouble(RatedMotorSpeed, 0.25);
+  N2kMsg.Add2ByteUDouble(MaxControllerTempRating, 0.01);
+  N2kMsg.Add2ByteUInt(MotorShaftTorqueRating);
+  N2kMsg.Add2ByteUDouble(MotorDCVoltageDeratingThreshold, 0.1);
+  N2kMsg.Add2ByteUDouble(MotorDCVoltageCutOffThreshold, 0.1);
+  N2kMsg.Add4ByteUInt(DriveMotorHours);
+}
+
+bool ParseN2kPGN127494(const tN2kMsg &N2kMsg, unsigned char &InverterMotorIdentifier, unsigned char &MotorType,
+                       double &MotorVoltageRating, unsigned long &MaxContinuousMotorPower, unsigned long &MaxBoostMotorPower,
+                       double &MaxMotorTempRating, double &RatedMotorSpeed, double &MaxControllerTempRating,
+                       unsigned short &MotorShaftTorqueRating, double &MotorDCVoltageDeratingThreshold,
+                       double &MotorDCVoltageCutOffThreshold, unsigned long &DriveMotorHours) {
+  if (N2kMsg.PGN != 127494L) return false;
+
+  int Index = 0;
+
+  InverterMotorIdentifier = N2kMsg.GetByte(Index);
+  MotorType = N2kMsg.GetByte(Index) & 0x0F; // Extract MotorType (4 bits)
+  MotorVoltageRating = N2kMsg.Get2ByteUDouble(0.1, Index);
+  MaxContinuousMotorPower = N2kMsg.Get4ByteUInt(Index);
+  MaxBoostMotorPower = N2kMsg.Get4ByteUInt(Index);
+  MaxMotorTempRating = N2kMsg.Get2ByteUDouble(0.01, Index);
+  RatedMotorSpeed = N2kMsg.Get2ByteUDouble(0.25, Index);
+  MaxControllerTempRating = N2kMsg.Get2ByteUDouble(0.01, Index);
+  MotorShaftTorqueRating = N2kMsg.Get2ByteUInt(Index);
+  MotorDCVoltageDeratingThreshold = N2kMsg.Get2ByteUDouble(0.1, Index);
+  MotorDCVoltageCutOffThreshold = N2kMsg.Get2ByteUDouble(0.1, Index);
+  DriveMotorHours = N2kMsg.Get4ByteUInt(Index);
+
+  return true;
+}
+
+//*****************************************************************************
+// Electric Energy Storage Information
+void SetN2kPGN127495(tN2kMsg &N2kMsg, unsigned char EnergyStorageID, unsigned char MotorType,
+                     unsigned char StorageChemistryConversion, unsigned short MaxTempDerating,
+                     unsigned short MaxTempShutOff, unsigned short MinTempDerating,
+                     unsigned short MinTempShutOff, unsigned int UsableBatteryEnergy,
+                     unsigned char StateOfHealth, unsigned short BatteryCycleCounter,
+                     unsigned char BatteryFullStatus, unsigned char BatteryEmptyStatus,
+                     unsigned char MaxChargeSOC, unsigned char MinChargeSOC) {
+  N2kMsg.SetPGN(127495L);
+  N2kMsg.Priority=2;
+  N2kMsg.AddByte(EnergyStorageID);
+  
+  // Combine MotorType and reserved bits into one byte
+  unsigned char MotorTypeAndReserved = (MotorType & 0x0F) | (0x00 << 4);
+  N2kMsg.AddByte(MotorTypeAndReserved);
+  
+  N2kMsg.AddByte(StorageChemistryConversion);
+  N2kMsg.Add2ByteUDouble(MaxTempDerating, 0.01);
+  N2kMsg.Add2ByteUDouble(MaxTempShutOff, 0.01);
+  N2kMsg.Add2ByteUDouble(MinTempDerating, 0.01);
+  N2kMsg.Add2ByteUDouble(MinTempShutOff, 0.01);
+  N2kMsg.Add4ByteUInt(UsableBatteryEnergy);
+  N2kMsg.AddByte(StateOfHealth);
+  N2kMsg.Add2ByteUInt(BatteryCycleCounter);
+  
+  // Combine BatteryFullStatus and BatteryEmptyStatus into one byte
+  unsigned char BatteryStatus = (BatteryFullStatus & 0x03) | ((BatteryEmptyStatus & 0x03) << 2) | (0x00 << 4);
+  N2kMsg.AddByte(BatteryStatus);
+  
+  N2kMsg.AddByte(MaxChargeSOC);
+  N2kMsg.AddByte(MinChargeSOC);
+}
+
+bool ParseN2kPGN127495(const tN2kMsg &N2kMsg, unsigned char &EnergyStorageID, unsigned char &MotorType,
+                       unsigned char &StorageChemistryConversion, unsigned short &MaxTempDerating,
+                       unsigned short &MaxTempShutOff, unsigned short &MinTempDerating,
+                       unsigned short &MinTempShutOff, unsigned int &UsableBatteryEnergy,
+                       unsigned char &StateOfHealth, unsigned short &BatteryCycleCounter,
+                       unsigned char &BatteryFullStatus, unsigned char &BatteryEmptyStatus,
+                       unsigned char &MaxChargeSOC, unsigned char &MinChargeSOC) {
+  if (N2kMsg.PGN!=127495L) return false;
+
+  int Index=0;
+
+  EnergyStorageID=N2kMsg.GetByte(Index);
+  
+  unsigned char MotorTypeAndReserved = N2kMsg.GetByte(Index);
+  MotorType = MotorTypeAndReserved & 0x0F;
+  // Reserved bits are ignored
+  
+  StorageChemistryConversion=N2kMsg.GetByte(Index);
+  MaxTempDerating=N2kMsg.Get2ByteUDouble(0.01, Index);
+  MaxTempShutOff=N2kMsg.Get2ByteUDouble(0.01, Index);
+  MinTempDerating=N2kMsg.Get2ByteUDouble(0.01, Index);
+  MinTempShutOff=N2kMsg.Get2ByteUDouble(0.01, Index);
+  UsableBatteryEnergy=N2kMsg.Get4ByteUInt(Index);
+  StateOfHealth=N2kMsg.GetByte(Index);
+  BatteryCycleCounter=N2kMsg.Get2ByteUInt(Index);
+  
+  unsigned char BatteryStatus = N2kMsg.GetByte(Index);
+  BatteryFullStatus = BatteryStatus & 0x03;
+  BatteryEmptyStatus = (BatteryStatus >> 2) & 0x03;
+  // Reserved bits are ignored
+  
+  MaxChargeSOC=N2kMsg.GetByte(Index);
+  MinChargeSOC=N2kMsg.GetByte(Index);
+
+  return true;
+}
+
+//*****************************************************************************
 // Trip Parameters, Engine
 void SetN2kPGN127497(tN2kMsg &N2kMsg, unsigned char EngineInstance, double TripFuelUsed,
                      double FuelRateAverage,
